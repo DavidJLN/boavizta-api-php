@@ -9,7 +9,7 @@ Tested with BoaviztAPI 2.4.1.
 ## Quick start
 
 ```bash
-composer require boavizta/boaviztapi-php symfony/http-client nyholm/psr7
+composer require davidjln/boaviztapi-php symfony/http-client nyholm/psr7
 ```
 
 ```php
@@ -36,7 +36,7 @@ optional.
 ## Installation
 
 ```bash
-composer require boavizta/boaviztapi-php
+composer require davidjln/boaviztapi-php
 ```
 
 **This package does not pick your HTTP client, it uses yours.**
