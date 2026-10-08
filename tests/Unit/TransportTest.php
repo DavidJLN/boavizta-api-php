@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Boavizta\Api\Tests\Unit;
 
+use Boavizta\Api\BoaviztaClient;
 use Boavizta\Api\Dto\Cpu;
 use Boavizta\Api\Enum\Criterion;
 use Boavizta\Api\Exception\BoaviztaException;
+use Boavizta\Api\Exception\ConfigurationException;
 use Boavizta\Api\Exception\NotFoundException;
 use Boavizta\Api\Exception\RateLimitException;
 use Boavizta\Api\Exception\ServerException;
@@ -18,6 +20,10 @@ use Boavizta\Api\Request\ImpactOptions;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Response;
 use Http\Client\Exception\NetworkException;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 
 final class TransportTest extends MockClientTestCase
@@ -181,6 +187,27 @@ final class TransportTest extends MockClientTestCase
         } finally {
             self::assertCount(0, $this->http->getRequests());
         }
+    }
+
+    /**
+     * @return iterable<string, array{RequestFactoryInterface&StreamFactoryInterface}>
+     */
+    public static function psr17Implementations(): iterable
+    {
+        yield 'guzzlehttp/psr7' => [new HttpFactory()];
+        yield 'nyholm/psr7' => [new Psr17Factory()];
+    }
+
+    #[DataProvider('psr17Implementations')]
+    public function testInvalidBaseUriIsRejectedWithOurOwnException(RequestFactoryInterface&StreamFactoryInterface $factory): void
+    {
+        try {
+            BoaviztaClient::create('http://:80', $this->http, $factory, $factory);
+            self::fail('ConfigurationException expected');
+        } catch (ConfigurationException $e) {
+            self::assertNotNull($e->getPrevious(), 'The implementation\'s exception is kept for debugging, never thrown');
+        }
+        self::assertCount(0, $this->http->getRequests());
     }
 
     public function testBaseUriTrailingSlashIsNormalized(): void

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Boavizta\Api\Http;
 
 use Boavizta\Api\Exception\BoaviztaException;
+use Boavizta\Api\Exception\ConfigurationException;
 use Boavizta\Api\Exception\NotFoundException;
 use Boavizta\Api\Exception\RateLimitException;
 use Boavizta\Api\Exception\ServerException;
@@ -18,6 +19,7 @@ use Psr\Cache\InvalidArgumentException as CacheInvalidArgumentException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -60,6 +62,10 @@ final class Transport
         private readonly ?int $cacheTtl = self::DEFAULT_CACHE_TTL,
     ) {
         $this->baseUri = rtrim($baseUri, '/');
+
+        // Let the PSR-17 implementation itself judge the URI now, rather than throw its own
+        // exception type at the first call.
+        $this->buildRequest('GET', $this->baseUri . self::VERSION_PATH, null);
     }
 
     /**
@@ -124,19 +130,15 @@ final class Transport
             return $cacheItem->get();
         }
 
-        $request = $this->requestFactory->createRequest($method, $uri)
-            ->withHeader('Accept', 'application/json');
-
+        $json = null;
         if ($method !== 'GET') {
             try {
                 $json = json_encode($body ?? new \stdClass(), JSON_THROW_ON_ERROR | JSON_PRESERVE_ZERO_FRACTION);
             } catch (\JsonException $e) {
                 throw new \InvalidArgumentException(sprintf('Cannot encode the body of %s %s as JSON: %s', $method, $uri, $e->getMessage()), 0, $e);
             }
-            $request = $request
-                ->withHeader('Content-Type', 'application/json')
-                ->withBody($this->streamFactory->createStream($json));
         }
+        $request = $this->buildRequest($method, $uri, $json);
 
         $start = hrtime(true);
         try {
@@ -189,6 +191,29 @@ final class Transport
             $status >= 500 => new ServerException($message, $status, $errorBody, null, self::retryAfter($response)),
             default => new BoaviztaException($message, $status, $errorBody),
         };
+    }
+
+    /**
+     * PSR-17 implementations reject what they cannot represent with their own exception types
+     * (e.g. Guzzle's MalformedUriException): translated, so that none reaches the caller.
+     *
+     * @throws ConfigurationException
+     */
+    private function buildRequest(string $method, string $uri, ?string $json): RequestInterface
+    {
+        try {
+            $request = $this->requestFactory->createRequest($method, $uri)
+                ->withHeader('Accept', 'application/json');
+            if ($json !== null) {
+                $request = $request
+                    ->withHeader('Content-Type', 'application/json')
+                    ->withBody($this->streamFactory->createStream($json));
+            }
+
+            return $request;
+        } catch (\InvalidArgumentException|\RuntimeException $e) {
+            throw new ConfigurationException(sprintf('Cannot build the request %s %s: %s', $method, $uri, $e->getMessage()), 0, null, $e);
+        }
     }
 
     /**
