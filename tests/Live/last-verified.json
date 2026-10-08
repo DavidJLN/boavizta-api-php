@@ -1,7 +1,7 @@
 {
     "verified_by": "bin/verify-live",
-    "verified_at": "2026-10-07T16:00:07Z",
+    "verified_at": "2026-10-08T15:50:25Z",
     "base_uri": "https://api.boavizta.org",
     "api_version": "2.4.1",
-    "sha256": "8883ffb46c268899ee6a799b8e63a4a6b2534291048e166da5b8e4ce615148da"
+    "sha256": "fa15a465d8e0630074870162169dab3f7935f915d4dc331aca229764bee56bb1"
 }
