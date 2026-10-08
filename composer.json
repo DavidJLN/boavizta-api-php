@@ -1,0 +1,63 @@
+{
+    "name": "boavizta/boaviztapi-php",
+    "description": "PHP client for BoaviztAPI, the environmental footprint API for digital hardware",
+    "type": "library",
+    "license": "AGPL-3.0-or-later",
+    "keywords": ["boavizta", "carbon", "lca", "environmental-impact", "api-client"],
+    "require": {
+        "php": ">=8.2",
+        "php-http/discovery": "^1.19",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.1 || ^2.0"
+    },
+    "require-dev": {
+        "guzzlehttp/guzzle": "^7.8",
+        "nyholm/psr7": "^1.8",
+        "php-http/curl-client": "^2.3",
+        "php-http/mock-client": "^1.6",
+        "phpstan/phpstan": "^2.0",
+        "phpunit/phpunit": "^11.0",
+        "psr/cache": "^1.0 || ^2.0 || ^3.0",
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
+        "symfony/http-client": "^7.0"
+    },
+    "suggest": {
+        "psr/http-client-implementation": "Any PSR-18 HTTP client (e.g. guzzlehttp/guzzle, symfony/http-client, php-http/curl-client)",
+        "psr/http-factory-implementation": "Any PSR-17 factories (e.g. nyholm/psr7, guzzlehttp/psr7, laminas/laminas-diactoros)",
+        "psr/cache-implementation": "Any PSR-6 cache pool, to cache GET responses (reference data, archetypes)",
+        "psr/log-implementation": "Any PSR-3 logger, to log HTTP calls and errors"
+    },
+    "conflict": {
+        "psr/cache": "<1.0",
+        "psr/log": "<1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Boavizta\\Api\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Boavizta\\Api\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:live": "phpunit --group live",
+        "record-fixtures": "bin/record-fixtures",
+        "verify-live": "bin/verify-live"
+    },
+    "scripts-descriptions": {
+        "test": "Unit and contract tests, offline",
+        "test:live": "Replays the contract scenarios against a real BoaviztAPI (BOAVIZTA_API_URL, default api.boavizta.org)",
+        "record-fixtures": "Records the contract fixtures from a real BoaviztAPI",
+        "verify-live": "Runs the live tests and, if they pass, updates tests/Live/last-verified.json"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}

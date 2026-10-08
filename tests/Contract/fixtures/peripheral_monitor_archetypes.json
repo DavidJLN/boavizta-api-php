@@ -1,0 +1,17 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-07T14:48:41Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "GET",
+        "url": "https://api.boavizta.org/v1/peripheral/monitor/archetypes",
+        "path": "/v1/peripheral/monitor/archetypes",
+        "query": "",
+        "body": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "d8fddd0d60ac3fff8971c8c538ac417425df3b592f91f7afed5818c90af3d7c8"
+}

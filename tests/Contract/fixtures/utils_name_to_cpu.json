@@ -1,0 +1,17 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-07T14:48:41Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "GET",
+        "url": "https://api.boavizta.org/v1/utils/name_to_cpu?cpu_name=Intel%20Xeon%20Gold%206134",
+        "path": "/v1/utils/name_to_cpu",
+        "query": "cpu_name=Intel%20Xeon%20Gold%206134",
+        "body": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "2310ebcb93e796a961985cca9a1498082eb6378a3d4a94a01403a1d58d673eaa"
+}

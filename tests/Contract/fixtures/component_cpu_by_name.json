@@ -1,0 +1,19 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-07T14:48:41Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "POST",
+        "url": "https://api.boavizta.org/v1/component/cpu?verbose=false&duration=8760&criteria=gwp",
+        "path": "/v1/component/cpu",
+        "query": "verbose=false&duration=8760&criteria=gwp",
+        "body": {
+            "name": "AMD EPYC 7763"
+        }
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "bda42852237366d43822110f48130c2d295b2602019db5d51266ddc3a96cb675"
+}

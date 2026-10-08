@@ -1,0 +1,17 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-08T14:59:36Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "GET",
+        "url": "https://api.boavizta.org/v1/iot/iot_device/archetype_config?archetype=iot-device-default",
+        "path": "/v1/iot/iot_device/archetype_config",
+        "query": "archetype=iot-device-default",
+        "body": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "7615bb59e4f783629fb08918800824786def3d66476d4819f1c9d556837ae06d"
+}

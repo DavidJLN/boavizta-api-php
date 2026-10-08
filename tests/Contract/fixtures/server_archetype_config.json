@@ -1,0 +1,17 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-07T14:48:40Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "GET",
+        "url": "https://api.boavizta.org/v1/server/archetype_config?archetype=dellR740",
+        "path": "/v1/server/archetype_config",
+        "query": "archetype=dellR740",
+        "body": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "1ed859d7e269cb8fb7414440aa67a8b1439b42f1ed6291b7ecd20c5425d361ab"
+}

@@ -1,0 +1,17 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-07T14:48:40Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "GET",
+        "url": "https://api.boavizta.org/v1/utils/impact_criteria",
+        "path": "/v1/utils/impact_criteria",
+        "query": "",
+        "body": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "76ec5f353ea6f5c5b1782f522c5b1298f56ea46c8ce6581bdc40d6e298409329"
+}

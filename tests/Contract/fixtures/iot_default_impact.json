@@ -1,0 +1,17 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-07T14:48:41Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "GET",
+        "url": "https://api.boavizta.org/v1/iot/iot_device?verbose=false&criteria=gwp",
+        "path": "/v1/iot/iot_device",
+        "query": "verbose=false&criteria=gwp",
+        "body": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "1bcf2fb42636351affa47f652892d52a4a0f78aec1a03aaa872614577622e519"
+}

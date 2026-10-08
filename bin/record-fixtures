@@ -1,0 +1,64 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * The only way to produce the contract recordings (tests/Contract/fixtures). Never edit them by hand:
+ * when one no longer matches, regenerate it and read the diff.
+ *
+ *     bin/record-fixtures                          # every scenario, against api.boavizta.org
+ *     bin/record-fixtures server_archetypes        # only the named scenarios
+ *     BOAVIZTA_API_URL=http://localhost:5000 bin/record-fixtures
+ */
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Boavizta\Api\BoaviztaClient;
+use Boavizta\Api\Tests\Contract\Support\RecordingClient;
+use Boavizta\Api\Tests\Contract\Support\Scenarios;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+
+$baseUri = rtrim(getenv('BOAVIZTA_API_URL') ?: BoaviztaClient::DEFAULT_BASE_URI, '/');
+$basePath = rtrim((string) parse_url($baseUri, PHP_URL_PATH), '/');
+$scenarios = Scenarios::all();
+$only = array_slice($argv, 1);
+
+if ($unknown = array_diff($only, array_keys($scenarios))) {
+    fwrite(STDERR, 'Unknown scenario(s): ' . implode(', ', $unknown) . "\n");
+    exit(1);
+}
+
+$http = Psr18ClientDiscovery::find();
+$requestFactory = Psr17FactoryDiscovery::findRequestFactory();
+$streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+
+// The server does not send its version in a header: ask it, before and after, so that no
+// recording is labelled with a version the server was not announcing while it answered.
+$announcedVersion = static fn (): string => BoaviztaClient::create($baseUri, $http, $requestFactory, $streamFactory)->utils()->version();
+$version = $announcedVersion();
+
+echo "Recording from $baseUri (BoaviztAPI $version)\n";
+$recordings = [];
+foreach ($only === [] ? $scenarios : array_intersect_key($scenarios, array_flip($only)) as $name => $scenario) {
+    $recorder = new RecordingClient($http, $streamFactory, $basePath);
+    $scenario->run(BoaviztaClient::create($baseUri, $recorder, $requestFactory, $streamFactory));
+
+    if (count($recorder->exchanges) !== 1) {
+        fwrite(STDERR, sprintf("%s sent %d requests, exactly 1 expected\n", $name, count($recorder->exchanges)));
+        exit(1);
+    }
+    $recordings[$name] = [$recorder->lastExchange(), gmdate('Y-m-d\TH:i:s\Z')];
+}
+
+if (($after = $announcedVersion()) !== $version) {
+    fwrite(STDERR, "The server went from BoaviztAPI $version to $after during the recording; nothing was written, run it again\n");
+    exit(1);
+}
+
+foreach ($recordings as $name => [$exchange, $recordedAt]) {
+    $exchange->save($name, $recordedAt, $version);
+    printf("  %-35s %-4s %s -> %d\n", $name, $exchange->method, $exchange->url, $exchange->status);
+}
+echo "Now read the diff of tests/Contract/fixtures before committing it.\n";

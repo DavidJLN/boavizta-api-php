@@ -1,0 +1,24 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-07T14:48:40Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "POST",
+        "url": "https://api.boavizta.org/v1/cloud/instance?verbose=false&duration=8760&criteria=gwp&criteria=pe",
+        "path": "/v1/cloud/instance",
+        "query": "verbose=false&duration=8760&criteria=gwp&criteria=pe",
+        "body": {
+            "provider": "aws",
+            "instance_type": "a1.4xlarge",
+            "usage": {
+                "time_workload": 50.0,
+                "usage_location": "FRA"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "f84e5fb539f47639cb511072d89bb8f3139f07488c650b3401735e56d228252c"
+}

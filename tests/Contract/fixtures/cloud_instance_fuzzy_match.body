@@ -1,0 +1,1 @@
+{"impacts":{"gwp":{"unit":"kgCO2eq","description":"Total climate change","embedded":{"value":76.0,"min":44.25,"max":101.2,"warnings":["End of life is not included in the calculation"]},"use":{"value":170.0,"min":3.351,"max":791.8}}},"warnings":["Instance 'a1.4xlarg' not found; using closest match 'a1.4xlarge' (fuzzy match)"]}

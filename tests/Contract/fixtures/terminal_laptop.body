@@ -1,0 +1,1 @@
+{"impacts":{"gwp":{"unit":"kgCO2eq","description":"Total climate change","embedded":{"value":45.25,"min":45.25,"max":45.25,"warnings":["Generic data used for impact calculation."]},"use":{"value":92.0,"min":61.61,"max":123.2}},"pe":{"unit":"MJ","description":"Consumption of primary energy","embedded":"not implemented","use":{"value":3600.0,"min":2374.0,"max":4748.0}}}}

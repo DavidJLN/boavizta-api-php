@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Runs the live tests against a real BoaviztAPI and, only if they all pass, records the date in
+ * tests/Live/last-verified.json. That file is versioned and written by this command, never by hand.
+ *
+ *     bin/verify-live                                   # api.boavizta.org
+ *     BOAVIZTA_API_URL=http://localhost:5000 bin/verify-live
+ */
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Boavizta\Api\BoaviztaClient;
+use Boavizta\Api\Tests\Contract\Support\LiveVerification;
+
+$baseUri = rtrim(getenv('BOAVIZTA_API_URL') ?: BoaviztaClient::DEFAULT_BASE_URI, '/');
+putenv("BOAVIZTA_API_URL=$baseUri");
+
+$phpunit = escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__DIR__ . '/../vendor/bin/phpunit');
+passthru("$phpunit --configuration " . escapeshellarg(__DIR__ . '/../phpunit.xml.dist') . ' --group live', $status);
+if ($status !== 0) {
+    fwrite(STDERR, "\nLive tests failed against $baseUri: " . basename(LiveVerification::FILE) . " left unchanged.\n");
+    exit($status);
+}
+
+$verification = new LiveVerification(
+    new \DateTimeImmutable('now', new \DateTimeZone('UTC')),
+    $baseUri,
+    BoaviztaClient::create($baseUri)->utils()->version(),
+);
+$verification->save();
+printf("\nVerified against %s (BoaviztAPI %s) on %s\n", $baseUri, $verification->apiVersion, $verification->verifiedAt->format('Y-m-d H:i:s \U\T\C'));

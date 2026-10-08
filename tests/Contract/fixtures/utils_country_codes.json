@@ -1,0 +1,17 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-08T14:59:36Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "GET",
+        "url": "https://api.boavizta.org/v1/utils/country_code",
+        "path": "/v1/utils/country_code",
+        "query": "",
+        "body": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "e7c6363787ef9f4fd21c29f0dd2808c59d92d17cc9740e681d9bd81b95e147bf"
+}

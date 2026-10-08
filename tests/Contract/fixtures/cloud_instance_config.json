@@ -1,0 +1,17 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-08T14:59:36Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "GET",
+        "url": "https://api.boavizta.org/v1/cloud/instance/instance_config?provider=aws&instance_type=a1.4xlarge",
+        "path": "/v1/cloud/instance/instance_config",
+        "query": "provider=aws&instance_type=a1.4xlarge",
+        "body": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "f8990a31af38414fe2dfe26aad6851659a1bc4a9d31195078fbde0c6f61a5efd"
+}

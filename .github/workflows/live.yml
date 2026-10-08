@@ -1,0 +1,81 @@
+name: live
+
+# Live tests: the contract scenarios against the real API, to prove the recordings still match it.
+#
+# Never part of the push / pull request loop (tests.yml): an outside contributor must never suffer
+# an outage of the remote server. Instead, every week:
+# - success: bin/verify-live updates tests/Live/last-verified.json, committed to main here;
+# - failure: an issue labelled "live-api" is opened (or commented), so we hear about it that week.
+# If this job stops succeeding, LiveVerificationIsFreshTest turns every build red after
+# LiveVerificationIsFreshTest::MAX_AGE_DAYS.
+on:
+  schedule:
+    - cron: '17 5 * * 1'   # every Monday, 05:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: live
+  cancel-in-progress: false
+
+jobs:
+  live:
+    # Only in the upstream repository: a fork has neither the right to push to it nor a reason to
+    # check the API on its behalf.
+    if: github.repository == 'DavidJLN/boavizta-api-php'
+    runs-on: ubuntu-latest
+    steps:
+      # Always main, even when dispatched from another branch: the verification date lives there.
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl
+          coverage: none
+      - run: composer install --no-interaction --no-progress
+
+      - id: verify
+        run: bin/verify-live
+
+      - name: Commit the verification date
+        id: commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tests/Live/last-verified.json
+          git commit -m 'Live tests passed against the real BoaviztAPI'
+          # main may have moved since the checkout: replay the commit on top of it.
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Report the failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          # The API was checked successfully but its date could not be saved: a different problem.
+          PUSH_FAILED: ${{ steps.verify.outcome == 'success' && steps.commit.outcome == 'failure' }}
+        run: |
+          gh label create live-api --color B60205 --description 'Live tests against the real BoaviztAPI' 2>/dev/null || true
+          if [ "$PUSH_FAILED" = 'true' ]; then
+            title='Live tests pass, but their date cannot be pushed to main'
+            body="$(printf '%s\n\n%s' \
+              "The live tests passed, but tests/Live/last-verified.json could not be pushed to main: $RUN_URL" \
+              'Check that github-actions[bot] may push to main (branch protection / rulesets), then rerun the workflow. Without it, every build turns red once the file is older than LiveVerificationIsFreshTest::MAX_AGE_DAYS.')"
+          else
+            title='Live tests fail against the real BoaviztAPI'
+            body="$(printf '%s\n\n%s' \
+              "The weekly live run failed: $RUN_URL" \
+              'Either the server is down (rerun later), or the API changed: regenerate the recordings with `bin/record-fixtures`, read the diff, fix the client, then run `bin/verify-live`. Without a successful run, every build turns red once tests/Live/last-verified.json is older than LiveVerificationIsFreshTest::MAX_AGE_DAYS.')"
+          fi
+          issue=$(gh issue list --repo "$GITHUB_REPOSITORY" --label live-api --state open --json number --jq '.[0].number')
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --repo "$GITHUB_REPOSITORY" --body "Still failing ($title): $RUN_URL"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --label live-api --title "$title" --body "$body"
+          fi

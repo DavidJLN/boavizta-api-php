@@ -1,0 +1,17 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-08T14:59:36Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "GET",
+        "url": "https://api.boavizta.org/v1/terminal/laptop/archetype_config?archetype=laptop-pro",
+        "path": "/v1/terminal/laptop/archetype_config",
+        "query": "archetype=laptop-pro",
+        "body": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "6e31a0dfd0666fb1a54acb0a791e1c0ac1acf253a7ecf5cf86405cf8817b4911"
+}

@@ -1,0 +1,20 @@
+{
+    "recorded_by": "bin/record-fixtures",
+    "recorded_at": "2026-10-07T14:48:41Z",
+    "api_version": "2.4.1",
+    "request": {
+        "method": "POST",
+        "url": "https://api.boavizta.org/v1/component/hdd?verbose=false&criteria=gwp",
+        "path": "/v1/component/hdd",
+        "query": "verbose=false&criteria=gwp",
+        "body": {
+            "type": "hdd",
+            "capacity": 2000
+        }
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json"
+    },
+    "sha256": "dd65044e49f776f418a6e12111f4d1ea54ef0ce039d475602cdc0aec1f016f48"
+}
