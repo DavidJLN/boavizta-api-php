@@ -6,6 +6,33 @@ equipment, over its **manufacturing** (`embedded`) and **use** (`use`) phases.
 
 Tested with BoaviztAPI 2.4.1.
 
+## Quick start
+
+```bash
+composer require boavizta/boaviztapi-php symfony/http-client nyholm/psr7
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Boavizta\Api\BoaviztaClient;
+use Boavizta\Api\Enum\Criterion;
+use Boavizta\Api\Request\ImpactOptions;
+
+$client = BoaviztaClient::create();
+$result = $client->cloud()->instanceImpact('aws', 'a1.4xlarge', new ImpactOptions(duration: 8760));
+
+$gwp = $result->impact(Criterion::Gwp);
+printf("Manufacturing: %.0f %s, use: %.0f %s\n", $gwp->embedded->value, $gwp->unit, $gwp->use->value, $gwp->unit);
+// Manufacturing: 76 kgCO2eq, use: 170 kgCO2eq
+```
+
+This is the climate impact of one year of an AWS `a1.4xlarge` instance, computed by the public
+API (`https://api.boavizta.org`) with a 30-second timeout and no cache. Everything below is
+optional.
+
 ## Installation
 
 ```bash
@@ -91,6 +118,8 @@ A failing cache does not make the call fail. The error is logged as a `warning` 
 goes to the server.
 
 ## Usage
+
+A server with a custom configuration, in France, over one year:
 
 ```php
 use Boavizta\Api\BoaviztaClient;
@@ -312,3 +341,13 @@ seal. The real safeguard remains the live tier: it compares each recording, byte
 what the server actually answers.
 
 For a local instance: `docker run -p 5000:5000 ghcr.io/boavizta/boaviztapi:latest`.
+
+## License
+
+Copyright (C) 2026 the boaviztapi-php contributors.
+
+This program is free software: you can redistribute it and/or modify it under the terms of the
+GNU Affero General Public License as published by the Free Software Foundation, either version 3
+of the License, or (at your option) any later version. See [LICENSE](LICENSE) for the full text.
+
+This is the same license as [BoaviztAPI](https://github.com/Boavizta/boaviztapi) itself.
