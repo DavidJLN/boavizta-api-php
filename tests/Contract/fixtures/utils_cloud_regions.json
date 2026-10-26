@@ -1,7 +1,7 @@
 {
     "recorded_by": "bin/record-fixtures",
-    "recorded_at": "2026-10-08T14:59:36Z",
-    "api_version": "2.4.1",
+    "recorded_at": "2026-10-26T13:27:03Z",
+    "api_version": "2.5.0",
     "request": {
         "method": "GET",
         "url": "https://api.boavizta.org/v1/utils/cloud_regions?provider=aws",
@@ -13,5 +13,5 @@
         "status": 200,
         "content_type": "application/json"
     },
-    "sha256": "1236386b0ca6cff8356802abc8cd44419283fa6e1a2d79382623398e9c1739ca"
+    "sha256": "51fee85ec3c4d55446e53aa24579f6cf53edef12b993b60f47067a278efe104b"
 }

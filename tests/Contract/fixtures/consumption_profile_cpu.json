@@ -1,7 +1,7 @@
 {
     "recorded_by": "bin/record-fixtures",
-    "recorded_at": "2026-10-07T14:48:41Z",
-    "api_version": "2.4.1",
+    "recorded_at": "2026-10-26T13:27:03Z",
+    "api_version": "2.5.0",
     "request": {
         "method": "POST",
         "url": "https://api.boavizta.org/v1/consumption_profile/cpu",
@@ -17,5 +17,5 @@
         "status": 200,
         "content_type": "application/json"
     },
-    "sha256": "51a3688744fdefdc3727e3e7c2aeb4a9f22532c6627fa0d07426cc486d21752a"
+    "sha256": "4299206b223f6debe819507df4dbaba0337cb3e7b458ff6bc8bbf0c3aa00407d"
 }

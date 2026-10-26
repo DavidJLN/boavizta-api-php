@@ -4,7 +4,7 @@ PHP client for [BoaviztAPI](https://github.com/Boavizta/boaviztapi), Boavizta's 
 the multi-criteria environmental impact (climate, resources, energy, water…) of digital
 equipment, over its **manufacturing** (`embedded`) and **use** (`use`) phases.
 
-Tested with BoaviztAPI 2.4.1.
+Tested with BoaviztAPI 2.5.0.
 
 ## Quick start
 

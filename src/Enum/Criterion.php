@@ -30,10 +30,10 @@ enum Criterion: string
     case Ap = 'ap';
     /** Ecotoxicity */
     case Ctue = 'ctue';
-    /** Human toxicity - cancer (the API key is upper-cased) */
-    case CtuhC = 'CTUh_c';
-    /** Human toxicity - non cancer (the API key is upper-cased) */
-    case CtuhNc = 'CTUh_nc';
+    /** Human toxicity - cancer (upper-cased `CTUh_c` before BoaviztAPI 2.5.0) */
+    case CtuhC = 'ctuh_c';
+    /** Human toxicity - non cancer (upper-cased `CTUh_nc` before BoaviztAPI 2.5.0) */
+    case CtuhNc = 'ctuh_nc';
     /** Eutrophication - freshwater */
     case Epf = 'epf';
     /** Eutrophication - marine */
@@ -56,6 +56,6 @@ enum Criterion: string
     case Mips = 'mips';
     /** Net use of freshwater (m3) */
     case Fw = 'fw';
-    /** Final energy consumption (MJ) */
+    /** Final energy consumption (kWh; MJ before BoaviztAPI 2.5.0) */
     case Fe = 'fe';
 }

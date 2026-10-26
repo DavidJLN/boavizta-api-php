@@ -1,7 +1,7 @@
 {
     "recorded_by": "bin/record-fixtures",
-    "recorded_at": "2026-10-08T14:59:36Z",
-    "api_version": "2.4.1",
+    "recorded_at": "2026-10-26T13:27:03Z",
+    "api_version": "2.5.0",
     "request": {
         "method": "GET",
         "url": "https://api.boavizta.org/v1/utils/name_to_gpu?gpu_name=NVIDIA%20A100",
@@ -13,5 +13,5 @@
         "status": 200,
         "content_type": "application/json"
     },
-    "sha256": "68103a4dae27797c392a9b1ddb6bc9bff79e869c1d75cf4b7a62095631161e87"
+    "sha256": "ae876da81e22cc9e55aee0eb361f361012a0ef2cec6724d751f639c8af07d808"
 }

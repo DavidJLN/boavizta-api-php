@@ -1,7 +1,7 @@
 {
     "recorded_by": "bin/record-fixtures",
-    "recorded_at": "2026-10-07T14:48:41Z",
-    "api_version": "2.4.1",
+    "recorded_at": "2026-10-26T13:27:03Z",
+    "api_version": "2.5.0",
     "request": {
         "method": "POST",
         "url": "https://api.boavizta.org/v1/server/?verbose=false",
@@ -54,5 +54,5 @@
         "status": 200,
         "content_type": "application/json"
     },
-    "sha256": "3bdf217744e73e0c8ee645c2dfb4538509eb55e385238ebd061fcfd42e257816"
+    "sha256": "ab2bcd7141fc37ac5f09cd8de590d2ad528171b8e5a9de6d0e1ba577f8093d8d"
 }
