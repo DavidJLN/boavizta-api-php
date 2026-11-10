@@ -8,6 +8,7 @@ use Boavizta\Api\Exception\UnexpectedResponseException;
 use Boavizta\Api\Response\ArchetypeConfig;
 use Boavizta\Api\Response\CpuConsumptionProfile;
 use Boavizta\Api\Response\CpuSpecification;
+use Boavizta\Api\Response\GpuSpecification;
 use Boavizta\Api\Response\ImpactCriterion;
 use Boavizta\Api\Response\ImpactResult;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -124,6 +125,33 @@ final class ResponseHydrationTest extends MockClientTestCase
         $this->expectException(UnexpectedResponseException::class);
         $this->expectExceptionMessage('"tdp" is missing');
         CpuSpecification::fromArray($data);
+    }
+
+    public function testGpuSpecificationReadsTdpAndGpusPerCard(): void
+    {
+        $data = [
+            'name' => 'NVIDIA A100 PCIe 40GB', 'manufacturer' => 'NVIDIA', 'weight' => 1.23, 'heatsink_weight' => null, 'pwb_surface' => null,
+            'pwb_weight' => null, 'casing_weight' => null, 'gpu_surface' => null, 'vram' => 40, 'vram_dies' => null, 'vram_surface' => null,
+            'tdp' => 250.0, 'gpus_per_card' => 1, 'transport_boat' => null, 'transport_truck' => null, 'transport_plane' => null,
+        ];
+        $gpu = GpuSpecification::fromArray($data);
+
+        self::assertSame(250.0, $gpu->tdp);
+        self::assertSame(1, $gpu->gpusPerCard);
+        self::assertSame(
+            ['units' => 2, 'name' => 'NVIDIA A100 PCIe 40GB', 'manufacturer' => 'NVIDIA', 'weight' => 1.23, 'vram' => 40, 'tdp' => 250.0, 'gpus_per_card' => 1],
+            $gpu->toGpu(2)->toArray(),
+        );
+
+        // BoaviztAPI 2.5 does not send them yet: absent means unknown, not an error.
+        $fromV25 = GpuSpecification::fromArray(array_diff_key($data, ['tdp' => true, 'gpus_per_card' => true]));
+        self::assertNull($fromV25->tdp);
+        self::assertNull($fromV25->gpusPerCard);
+
+        // Present, they are still type-checked.
+        $this->expectException(UnexpectedResponseException::class);
+        $this->expectExceptionMessage('"gpus_per_card"');
+        GpuSpecification::fromArray(['gpus_per_card' => 'one'] + $data);
     }
 
     public function testArchetypeConfigSplitsParametersAndGroups(): void

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Boavizta\Api\Dto;
 
 /**
- * GPU description. `name` alone (e.g. "NVIDIA A100 80GB SXM") is often enough. Weights in kg, surfaces in cm², vram in GB.
+ * GPU description. `name` alone (e.g. "NVIDIA A100 80GB SXM") is often enough. Weights in kg, surfaces in cm², vram in GB, tdp in W.
  */
 final class Gpu extends AbstractDto
 {
@@ -22,6 +22,8 @@ final class Gpu extends AbstractDto
         public readonly ?int $vram = null,
         public readonly ?int $vramDies = null,
         public readonly ?float $vramSurface = null,
+        public readonly ?float $tdp = null,
+        public readonly ?int $gpusPerCard = null,
         public readonly ?float $transportBoat = null,
         public readonly ?float $transportTruck = null,
         public readonly ?float $transportPlane = null,

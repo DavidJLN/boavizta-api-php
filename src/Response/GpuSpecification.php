@@ -7,7 +7,7 @@ namespace Boavizta\Api\Response;
 use Boavizta\Api\Dto\Gpu;
 
 /**
- * GPU resolved from a free-text name (utils()->nameToGpu()). Weights in kg, surfaces in cm², vram in GB.
+ * GPU resolved from a free-text name (utils()->nameToGpu()). Weights in kg, surfaces in cm², vram in GB, tdp in W.
  * Unknown attributes are null.
  */
 final class GpuSpecification
@@ -24,6 +24,8 @@ final class GpuSpecification
         public readonly ?int $vram,
         public readonly ?int $vramDies,
         public readonly ?float $vramSurface,
+        public readonly ?float $tdp,
+        public readonly ?int $gpusPerCard,
         public readonly ?float $transportBoat,
         public readonly ?float $transportTruck,
         public readonly ?float $transportPlane,
@@ -31,7 +33,7 @@ final class GpuSpecification
     }
 
     /**
-     * Every key read is required, even when its value is null.
+     * Every key read is required, even when its value is null, except `tdp` and `gpus_per_card` (BoaviztAPI 2.6+).
      *
      * @param array<mixed> $data
      *
@@ -55,6 +57,9 @@ final class GpuSpecification
             $int('vram'),
             $int('vram_dies'),
             $float('vram_surface'),
+            // Sent since BoaviztAPI 2.6.0: optional, so that a 2.5 server keeps working.
+            array_key_exists('tdp', $data) ? $float('tdp') : null,
+            array_key_exists('gpus_per_card', $data) ? $int('gpus_per_card') : null,
             $float('transport_boat'),
             $float('transport_truck'),
             $float('transport_plane'),
@@ -79,6 +84,8 @@ final class GpuSpecification
             vram: $this->vram,
             vramDies: $this->vramDies,
             vramSurface: $this->vramSurface,
+            tdp: $this->tdp,
+            gpusPerCard: $this->gpusPerCard,
             transportBoat: $this->transportBoat,
             transportTruck: $this->transportTruck,
             transportPlane: $this->transportPlane,

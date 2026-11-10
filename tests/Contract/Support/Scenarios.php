@@ -197,7 +197,8 @@ final class Scenarios
                     $gwp = self::impactResult($result, $body)->impact(Criterion::Gwp);
                     Assert::assertNotNull($gwp);
                     Assert::assertSame(1791.0, $gwp->embedded?->value, 'Value asserted by the upstream test suite');
-                    Assert::assertSame(7000.0, $gwp->use?->value, 'Value asserted by the upstream test suite');
+                    // 20000 since BoaviztAPI 2.6.0, which adds the GPUs' use phase (7000 in 2.5.0).
+                    Assert::assertSame(20000.0, $gwp->use?->value, 'Value asserted by the upstream test suite');
                 },
             ),
 
