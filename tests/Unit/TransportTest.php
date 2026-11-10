@@ -102,7 +102,7 @@ final class TransportTest extends MockClientTestCase
     public function testRetryAfterAsHttpDate(): void
     {
         $in = new \DateTimeImmutable('+120 seconds', new \DateTimeZone('UTC'));
-        $this->http->addResponse(new Response(503, ['Retry-After' => $in->format(DATE_RFC7231)], 'Service Unavailable'));
+        $this->http->addResponse(new Response(503, ['Retry-After' => $in->format('D, d M Y H:i:s \G\M\T')], 'Service Unavailable'));
 
         try {
             $this->client->utils()->version();

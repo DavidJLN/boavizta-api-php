@@ -273,7 +273,8 @@ final class Transport
         if (ctype_digit($value)) {
             return (int) $value;
         }
-        $date = \DateTimeImmutable::createFromFormat(DATE_RFC7231, $value, new \DateTimeZone('UTC'));
+        // IMF-fixdate (RFC 9110), always in GMT. Not DATE_RFC7231: deprecated since PHP 8.5.
+        $date = \DateTimeImmutable::createFromFormat('D, d M Y H:i:s \G\M\T', $value, new \DateTimeZone('UTC'));
 
         return $date === false ? null : max(0, $date->getTimestamp() - time());
     }

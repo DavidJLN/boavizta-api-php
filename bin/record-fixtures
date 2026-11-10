@@ -23,7 +23,8 @@ use Http\Discovery\Psr18ClientDiscovery;
 $baseUri = rtrim(getenv('BOAVIZTA_API_URL') ?: BoaviztaClient::DEFAULT_BASE_URI, '/');
 $basePath = rtrim((string) parse_url($baseUri, PHP_URL_PATH), '/');
 $scenarios = Scenarios::all();
-$only = array_slice($argv, 1);
+// $_SERVER['argv'] rather than $argv, which static analysis cannot see in a script.
+$only = array_values(array_filter(array_slice((array) ($_SERVER['argv'] ?? []), 1), 'is_string'));
 
 if ($unknown = array_diff($only, array_keys($scenarios))) {
     fwrite(STDERR, 'Unknown scenario(s): ' . implode(', ', $unknown) . "\n");

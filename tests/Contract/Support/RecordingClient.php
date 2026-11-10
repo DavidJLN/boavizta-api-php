@@ -36,6 +36,8 @@ final class RecordingClient implements ClientInterface
 
     public function lastExchange(): Exchange
     {
-        return $this->exchanges[array_key_last($this->exchanges)] ?? throw new \LogicException('No request was sent');
+        $last = array_key_last($this->exchanges);
+
+        return $last === null ? throw new \LogicException('No request was sent') : $this->exchanges[$last];
     }
 }
